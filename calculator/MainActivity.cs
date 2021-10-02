@@ -3,15 +3,18 @@ using Android.OS;
 using Android.Runtime;
 using AndroidX.AppCompat.App;
 using Android.Widget;
-using Android.Widget.Inline;
 using System;
+using Android.Text.Method;
+using Android.Views;
+using AndroidX.RecyclerView.Widget;
+using Java.Lang;
 
 namespace calculator
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        int old;
+        decimal old;
         string add;
         string fun;
         Button buttonmines;
@@ -28,8 +31,12 @@ namespace calculator
         Button buttonc;
         Button buttonpluss;
         Button buttonequall;
+        Button buttondelet;
         TextView textresult;
         TextView textrealresult;
+        Button buttonzarb;
+        Button buttonslash;
+        Button buttontavan;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -81,6 +88,18 @@ namespace calculator
             buttonmines = FindViewById<Button>(Resource.Id.buttonmines);
             buttonmines.Click += buttonminesclick;
 
+            buttondelet = FindViewById<Button>(Resource.Id.buttondel);
+            buttondelet.Click += buttondelclick;
+
+            buttonzarb = FindViewById<Button>(Resource.Id.buttonzarb);
+            buttonzarb.Click += buttonzarbclick;
+
+            buttonslash = FindViewById<Button>(Resource.Id.buttontslash);
+            buttonslash.Click += buttonslashclick;
+            buttontavan = FindViewById<Button>(Resource.Id.buttontavan);
+            buttontavan.Click += buttontavanclick;
+
+
 
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -106,9 +125,9 @@ namespace calculator
 
             textresult.TextChanged -= textchange;
             if (textrealresult.Text == "")
-                old += int.Parse(textresult.Text);
+                old += decimal.Parse(textresult.Text);
             else
-                old = int.Parse(textrealresult.Text);
+                old = decimal.Parse(textrealresult.Text);
             
             textresult.Text += buttonpluss.Text;
             fun = textresult.Text;
@@ -117,16 +136,22 @@ namespace calculator
         }
         public void textchange(object sender, EventArgs eventArgs)
         {
-            //if (old != 0)
-            //{
+            if (old != 0)
+            {
                 
                 add = (textresult.Text.Replace(fun,"",StringComparison.OrdinalIgnoreCase));
                 if (fun[fun.Length - 1] == '+')
-                    textrealresult.Text = (old + int.Parse(add)).ToString();
+                    textrealresult.Text = (old + decimal.Parse(add)).ToString();
                 if (fun[fun.Length - 1] == '-')
-                    textrealresult.Text = (old - int.Parse(add)).ToString();
+                    textrealresult.Text = (old - decimal.Parse(add)).ToString();
+                if (fun[fun.Length - 1] == '*')
+                    textrealresult.Text = (old * decimal.Parse(add)).ToString();
+                if (fun[fun.Length - 1] == '/')
+                    textrealresult.Text = (old / decimal.Parse(add)).ToString();
+                if (fun[fun.Length - 1] == '^')
+                    textrealresult.Text = (System.Math.Pow((double)old, double.Parse(add)).ToString());
                 add = "";
-            //}
+            }
         }
 
 
@@ -136,9 +161,9 @@ namespace calculator
 
             textresult.TextChanged -= textchange;
             if (textrealresult.Text == "")
-                old += int.Parse(textresult.Text);
+                old += decimal.Parse(textresult.Text);
             else
-                old = int.Parse(textrealresult.Text);
+                old = decimal.Parse(textrealresult.Text);
 
             textresult.Text += buttonmines.Text;
             fun = textresult.Text;
@@ -146,7 +171,10 @@ namespace calculator
             textresult.TextChanged += textchange;
         }
 
-
+        public void buttondelclick(object sender,EventArgs eventArgs)
+        {
+            textresult.Text = textresult.Text.Remove(textresult.Text.Length - 1, 1);
+        }
         public void buttonequal(object sender, EventArgs eventArgs)
         {
             if (textresult.Text != "")
@@ -155,11 +183,63 @@ namespace calculator
                 textresult.Text = textrealresult.Text;
                 old = 0;
                 add = "";
-                old = 0;
+                
                 textrealresult.Text = "";
             }
 
 
         }
+
+        public void buttonzarbclick(object sender, EventArgs eventArgs)
+        {
+
+            textresult.TextChanged -= textchange;
+            if (textrealresult.Text == "")
+                old += decimal.Parse(textresult.Text);
+            else
+                old = decimal.Parse(textrealresult.Text);
+
+            textresult.Text += buttonzarb.Text;
+            fun = textresult.Text;
+            //textresult.Text = "";
+            textresult.TextChanged += textchange;
+        }
+
+        public void buttonslashclick(object sender, EventArgs eventArgs)
+        {
+
+            textresult.TextChanged -= textchange;
+            if (textrealresult.Text == "")
+                old += decimal.Parse(textresult.Text);
+            else
+                old = decimal.Parse(textrealresult.Text);
+
+            textresult.Text += buttonslash.Text;
+            fun = textresult.Text;
+            //textresult.Text = "";
+            textresult.TextChanged += textchange;
+        }
+        public void buttontavanclick(object sender, EventArgs eventArgs)
+        {
+
+            textresult.TextChanged -= textchange;
+            if (textrealresult.Text == "")
+                old += decimal.Parse(textresult.Text);
+            else
+                old = decimal.Parse(textrealresult.Text);
+
+            textresult.Text += "^";
+            fun = textresult.Text;
+            //textresult.Text = "";
+            textresult.TextChanged += textchange;
+        }
+
     }
 }
+
+
+
+
+
+
+
