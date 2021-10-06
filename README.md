@@ -1,3 +1,3 @@
-# xamarin.android-calculator-app
-xamarin.android calculator app
-Simple xamarin android calculator app
+#Calculator
+
+a Simple Xamarin Android Calculator App
